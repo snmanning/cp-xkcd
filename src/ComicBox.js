@@ -39,7 +39,7 @@ fetchRandomComic() {
 }
 
     render () {
-        const { success, error } = this.state;
+        const { success, error, comic } = this.state;
         if(error) {
             return (
                 <p>
