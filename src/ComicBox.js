@@ -2,11 +2,16 @@ import React, { Component } from 'react';
 import './ComicBox.css';
 import axios from 'axios';
 
+function randomNumber(lower, upper) {
+    const min = Math.ceil(lower);
+    const max = Math.floor(upper);
+    return Math.floor(Math.random() * (max-min + 1)) + min;
+}
+
 class ComicBox extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            number: 0,
             comic: {},
             success: false,
             error: null,
@@ -14,19 +19,23 @@ class ComicBox extends Component {
     }
 
 componentDidMount() {
-    // const url = 'https://xkcd.com/614/info.0.json';
-    const url = 'https://jsonplaceholder.typicode.com/users/1';
-    axios.get(url).then(response => {
-        this.setState({
-            comic: response.data,
-            success: true,
-        });
-    }).catch((error) => {
-            this.setState({
-                success: false,
-                error: error,
-            });
-    });
+   this.fetchRandomComic();
+}
+
+fetchRandomComic() {
+    const number = randomNumber(1, 2000); 
+    const url = `/comic/${number}`;
+     axios.get(url).then(response => {
+         this.setState({
+             comic: response.data,
+             success: true,
+         });
+     }).catch((error) => {
+             this.setState({
+                 success: false,
+                 error: error,
+             });
+     });
 }
 
     render () {
@@ -48,7 +57,13 @@ componentDidMount() {
 
         return (
             <div className='ComicBox-container'>
-                Here be comics
+                <h1 className='ComicBox-title'>
+                    {comic.safe_title}
+                </h1>
+                <button type='button'  onClick={this.fetchRandomComic.bind(this)} className='ComicBox-button' >
+                    Random
+                </button>
+                <img src={comic.img} alt={comic.alt} className='ComicBox-image' />
             </div>
         );
     }
