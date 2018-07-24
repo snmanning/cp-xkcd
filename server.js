@@ -19,7 +19,6 @@ server.get('/comic/:number', (request, response) => {
           .catch(() => {
              response.status(500).json ({
                  msg: 'Something went horribly awry',
-                 error: error,
              });
          });
 });
